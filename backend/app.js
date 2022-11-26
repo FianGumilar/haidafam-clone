@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
     res.send('welcome to home page')
 })
 
-app.use('/auth', authRouter);
+app.use('/', authRouter);
 app.use('/users', userRouter);
 app.use('/rooms', roomRouter);
 app.use('/hotels', hotelRouter);

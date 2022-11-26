@@ -2,11 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { v4: uuid } = require('uuid');
 const { 
+  countByCity,
+  countByType,
   createHotel,
   updateHotel,
   deleteHotel,
   getAllHotels,
-  getHotelById, } = require('../controllers/hotel');
+  getHotelRoom,
+  getHotelById,
+  getHotelRooms, } = require('../controllers/hotel');
 
 const { verifyAdmin, verifyUser } = require('../utils/verifyToken')
 
@@ -23,6 +27,15 @@ router.delete('/:id', verifyAdmin, deleteHotel);
 router.get('/', getAllHotels);
 
 //GET BY ID
-router.get('/:id', getHotelById);
+router.get('/find/:id', getHotelById);
+
+//COUNT BY CITY
+router.get('/countByCity', countByCity)
+
+//COUNT BY TYPE
+router.get('/countByType', countByType)
+
+//GET HOTEL ROOMS
+router.get('/room/:id', getHotelRooms)
 
 module.exports = router;

@@ -1,4 +1,6 @@
+const { countDocuments } = require('../models/Hotel');
 const Hotel = require('../models/Hotel');
+const Room = require('../models/Room');
 
 exports.createHotel = async(req,res, next) => {
     const newHotel = new Hotel(req.body)  ;
@@ -50,3 +52,45 @@ exports.getHotelById = async(req, res, next) => {
         res.status(500).json(err);
       }
 }
+
+exports.countByCity = async (req, res, next) => {
+  const cities = req.query.cities.split(",");
+  try {
+    const list = await Promise.all(
+      cities.map((city) => {
+        return Hotel.countDocuments({ city: city });
+      })
+    );
+    res.status(200).json(list);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.countByType = async (req, res, next) => {
+  try {
+    const hotelCount = await Hotel.countDocuments({type: "hotel"});
+    const villaCount = await Hotel.countDocuments({type: "villa"});
+    
+    res.status(200).json([
+      { type: "hotel", count: hotelCount},
+      { type: "villa", count: villaCount} 
+    ])
+  } catch (err) {
+    next(err);
+  }
+}
+// Error
+exports.getHotelRooms = async (req, res, next) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    const list = await Promise.all(
+      hotel.rooms.map((room) => {
+        return Room.findById(room);
+      })
+    );
+    res.status(200).json(list)
+  } catch (err) {
+    next(err);
+  }
+};
