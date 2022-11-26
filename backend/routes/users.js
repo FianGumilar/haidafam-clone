@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { v4: uuid } = require('uuid');
-const { updateUser,
+const { createUser,
+        updateUser,
         deleteUser,
         getAllUsers,
         getUserById } = require('../controllers/user');
@@ -20,6 +21,10 @@ router.get('/checkadmin/:id', verifyAdmin, (req, res, next) => {
     res.send('Hello, You can delete all accounts');
 });
 */
+
+//CREATE
+router.post('/', verifyUser, createUser);
+
 //UPDATE
 router.patch('/:id', verifyUser, updateUser);
 

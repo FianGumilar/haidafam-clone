@@ -3,12 +3,12 @@ const Hotel = require('../models/Hotel');
 const Room = require('../models/Room');
 
 exports.createHotel = async(req,res, next) => {
-    const newHotel = new Hotel(req.body)  ;
+    const newHotel = new Hotel(req.body);
     try {
       const savedHotel = await newHotel.save();
-      res.status(200).json(savedHotel);
+      return res.status(200).json(savedHotel);
     } catch(err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
 }
 
@@ -18,9 +18,9 @@ exports.updateHotel = async(req, res, next) => {
           req.params.id,
           { $set: req.body },
           { $new: true });
-          res.status(200).json(updatedHotel);
+          return res.status(200).json("Update successfully");
       } catch(err) {
-        res.status(500).json(err);
+        return res.status(500).json(err);
       }
 }
 
@@ -29,27 +29,27 @@ exports.deleteHotel = async(req, res, next) => {
 
     try {
       await Hotel.findByIdAndDelete(id);
-      res.status(200).json("deleted successfully!");  
+      return res.status(200).json("deleted successfully!");  
     } catch(err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
 }
 
 exports.getAllHotels = async(req, res, next) => {
     try { 
         const hotels = await Hotel.find();
-        res.status(200).json(hotels);
+        return res.status(200).json(hotels);
       } catch(err) {
-        next(err);
+        return next(err);
       }
 }
 
 exports.getHotelById = async(req, res, next) => {
     try {
         const hotel = await Hotel.findById(req.params.id)
-        res.status(200).json(hotel);
+        return res.status(200).json(hotel);
       } catch(err) {
-        res.status(500).json(err);
+        return res.status(500).json(err);
       }
 }
 
@@ -61,7 +61,7 @@ exports.countByCity = async (req, res, next) => {
         return Hotel.countDocuments({ city: city });
       })
     );
-    res.status(200).json(list);
+    return res.status(200).json(list);
   } catch (err) {
     next(err);
   }
@@ -72,12 +72,12 @@ exports.countByType = async (req, res, next) => {
     const hotelCount = await Hotel.countDocuments({type: "hotel"});
     const villaCount = await Hotel.countDocuments({type: "villa"});
     
-    res.status(200).json([
+    return res.status(200).json([
       { type: "hotel", count: hotelCount},
       { type: "villa", count: villaCount} 
     ])
   } catch (err) {
-    next(err);
+    return next(err);
   }
 }
 // Error
@@ -89,8 +89,8 @@ exports.getHotelRooms = async (req, res, next) => {
         return Room.findById(room);
       })
     );
-    res.status(200).json(list)
+    return res.status(200).json(list)
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

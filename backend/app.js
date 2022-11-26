@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/', authRouter);
-app.use('/users', userRouter);
+app.use('/guest', userRouter);
 app.use('/rooms', roomRouter);
 app.use('/hotels', hotelRouter);
 

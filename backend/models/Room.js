@@ -24,8 +24,7 @@ const hotelRoom = new mongoose.Schema({
     description: {
         type: String,
         required: true
-    },
-    roomsNumber: [{number: Number, unavailableDates: [{ type: Date }]}]  
+    },  
 }, 
     { timestamps: true }
 )

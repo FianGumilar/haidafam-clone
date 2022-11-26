@@ -16,9 +16,9 @@ exports.createRoom = async (req, res, next) => {
     } catch (err) {
       next(err);
     }
-    res.status(200).json(savedRoom);
+    return res.status(200).json(savedRoom);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -28,9 +28,9 @@ exports.updateRoom = async(req, res, next) => {
           req.params.id,
           { $set: req.body },
           { $new: true });
-          res.status(200).json(updatedRoom);
+          return res.status(200).json("update Room successfully");
       } catch(err) {
-        res.status(500).json(err);
+        return res.status(500).json(err);
       }
 }
 
@@ -47,26 +47,26 @@ exports.deleteRoom = async(req, res, next) => {
     } catch(err) {
         next(err);
     }
-    res.status(200).json("deleted successfully");
+    return res.status(200).json("deleted successfully");
     } catch(err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
 }
 
 exports.getAllRooms = async(req, res, next) => {
     try { 
         const rooms = await Room.find();
-        res.status(200).json(rooms);
+        return res.status(200).json(rooms);
       } catch(err) {
-        next(err);
+        return next(err);
       }
 }
 
 exports.getRoomById = async(req, res, next) => {
     try {
         const room = await Room.findById(req.params.id)
-        res.status(200).json(room);
+        return res.status(200).json(room);
       } catch(err) {
-        res.status(500).json(err);
+        return res.status(500).json(err);
       }
 }
