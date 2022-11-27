@@ -35,7 +35,5 @@ router.get('/countByCity', countByCity)
 //COUNT BY TYPE
 router.get('/countByType', countByType)
 
-//GET HOTEL ROOMS
-router.get('/room/:id', getHotelRooms)
 
 module.exports = router;

@@ -2,6 +2,7 @@ require('dotenv').config();
 const Auth = require('../models/Auth');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { createError } = require('../utils/error') 
 
 exports.register = async(req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
