@@ -1,16 +1,36 @@
 require('dotenv').config();
+require('./routes/auth')
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
+const flash = require('connect-flash');
 
 const userRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 const hotelRouter = require('./routes/hotels');
 const roomRouter = require('./routes/rooms');
+const foodRouter = require('./routes/food');
+const souvenirRouter = require('./routes/souvenir');
+const { ppid } = require('process');
 
 const app = express();
+app.use(session({ secret: process.env.AUTH_SEC, 
+    resave: false, 
+    saveUninitialized: true,
+    maxAge: 60 * 1000,
+    store: new MemoryStore({
+        checkPeriod: 86400000 // prune expired entries every 24h
+      }),
+ }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(flash());
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -20,13 +40,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //middlewares
 app.get('/', (req, res) => {
-    res.send('welcome to home page')
+    res.send('<a href="/auth/google">Login with Google</a>');
 })
 
 app.use('/', authRouter);
-app.use('/guest', userRouter);
-app.use('/rooms', roomRouter);
-app.use('/hotels', hotelRouter);
+app.use('/profile/guest-profile', userRouter);
+app.use('/hotels/:hotelID', roomRouter);
+app.use('/hotels/rooms', hotelRouter);
+app.use('/hotels/:hotelid', foodRouter);
+app.use('/hotels/:hotelId', souvenirRouter);
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500;
@@ -37,6 +59,11 @@ app.use((err, req, res, next) => {
         message: errorMessage,
         stack: err.stack
     })
+})
+
+app.use((req, res, next) => {
+    res.locals.error = req.flash('error');
+    next();
 })
 
 

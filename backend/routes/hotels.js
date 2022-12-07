@@ -23,17 +23,17 @@ router.patch('/:id',verifyAdmin ,updateHotel);
 //DELETE
 router.delete('/:id', verifyAdmin, deleteHotel);
 
+//GET BY ID
+router.get('/find/:id', getHotelById);
+
 //GET ALL
 router.get('/', getAllHotels);
-
-//GET BY ID
-router.get('/:id', getHotelById);
 
 //COUNT BY CITY
 router.get('/countByCity', countByCity)
 
 //COUNT BY TYPE
-router.get('/countByType', countByType)
+//router.get('/countByType', countByType)
 
 
 module.exports = router;

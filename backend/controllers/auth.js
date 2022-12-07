@@ -1,8 +1,10 @@
 require('dotenv').config();
+require('./passportLocal');
 const Auth = require('../models/Auth');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { createError } = require('../utils/error') 
+const { createError } = require('../utils/error'); 
+const { findOne } = require('../models/Auth');
 
 exports.register = async(req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
@@ -50,3 +52,19 @@ exports.login = async (req, res, next) => {
       next(err);
     }
   };
+
+exports.logout = (req, res, next) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        next(err)
+      } else {
+        res.clearCookie('access_token')
+        res.redirect('/')
+      }
+    })
+  }
+}
+
+// res.clearCookie("access_token", "connect.sid")
+// res.redirect('/');

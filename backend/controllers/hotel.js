@@ -36,9 +36,10 @@ exports.deleteHotel = async(req, res, next) => {
 }
 
 exports.getAllHotels = async(req, res, next) => {
+  const cities = req.query.citiess.split(",");
     try { 
         const hotels = await Hotel.find();
-        return res.status(200).json(hotels);
+          return res.status(200).json(hotels);
       } catch(err) {
         return next(err);
       }
@@ -62,35 +63,35 @@ exports.countByCity = async (req, res, next) => {
       })
     );
     return res.status(200).json(list);
-  } catch (err) {
+  } catch (err) { 
     next(err);
   }
 };
 
-exports.countByType = async (req, res, next) => {
-  try {
-    const hotelCount = await Hotel.countDocuments({type: "hotel"});
-    const villaCount = await Hotel.countDocuments({type: "villa"});
+// exports.countByType = async (req, res, next) => {
+//   try {
+//     const hotelCount = await Hotel.countDocuments({type: "hotel"});
+//     const villaCount = await Hotel.countDocuments({type: "villa"});
     
-    return res.status(200).json([
-      { type: "hotel", count: hotelCount},
-      { type: "villa", count: villaCount} 
-    ])
-  } catch (err) {
-    return next(err);
-  }
-}
+//     return res.status(200).json([
+//       { type: "hotel", count: hotelCount},
+//       { type: "villa", count: villaCount} 
+//     ])
+//   } catch (err) {
+//     return next(err);
+//   }
+// }
 // Error
-exports.getHotelRooms = async (req, res, next) => {
-  try {
-    const hotel = await Hotel.findById(req.params.id);
-    const list = await Promise.all(
-      hotel.rooms.map((room) => {
-        return Room.findById(room);
-      })
-    );
-    return res.status(200).json(list)
-  } catch (err) {
-    return next(err);
-  }
-};
+// exports.getHotelRooms = async (req, res, next) => {
+//   try {
+//     const hotel = await Hotel.findById(req.params.id);
+//     const list = await Promise.all(
+//       hotel.rooms.map((room) => {
+//         return Room.findById(room);
+//       })
+//     );
+//     return res.status(200).json(list)
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
