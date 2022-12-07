@@ -36,7 +36,6 @@ exports.deleteHotel = async(req, res, next) => {
 }
 
 exports.getAllHotels = async(req, res, next) => {
-  const cities = req.query.citiess.split(",");
     try { 
         const hotels = await Hotel.find();
           return res.status(200).json(hotels);
