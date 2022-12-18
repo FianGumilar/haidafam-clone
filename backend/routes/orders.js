@@ -9,6 +9,6 @@ router.get('/', getAllOrders);
 router.post('/', createOrder);
 
 //GET ORDER BY ID
-router.get('/status/:transaction_id', getOrderById);
+router.get('/:transaction_id/payment', getOrderById);
 
 module.exports = router;
