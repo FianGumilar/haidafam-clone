@@ -17,7 +17,7 @@ router.post('/foods', verifyAdmin, createFood);
 router.patch('/:id/foods', verifyAdmin, updateFood);
 
 //DELETE FOOD =
-router.delete('/:id/:foods', verifyAdmin, deleteFood);
+router.delete('/:id/foods', verifyAdmin, deleteFood);
 
 //GET ALL FOOD BY HOTEL ID =
 router.get('/foods', getAllFoodByHotelId);

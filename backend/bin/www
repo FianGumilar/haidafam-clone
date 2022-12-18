@@ -7,12 +7,15 @@
 const app = require('../app');
 const debug = require('debug')('haidafam-clone:server');
 const http = require('http');
+// const path = require('path');
+// const https = require('https');
+// const fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '3000', console.log("Connected to backend"));
+const port = normalizePort(process.env.PORT || '3000', console.log("Connected to backend 🚀🔑"));
 app.set('port', port);
 
 /**
@@ -20,6 +23,10 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
+// const sslServer = https.createServer({
+//     key: fs.readFileSync(path.join(__dirname, '../certificate', 'key.pem')),
+//     certificate: fs.readFileSync(path.join(__dirname, '../certificate', 'cert.pem'))
+// })
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -9,6 +9,8 @@ const passport = require('passport');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
 const flash = require('connect-flash');
+const csrf = require('csurf')
+const helmet = require('helmet');
 
 const userRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
@@ -16,7 +18,11 @@ const hotelRouter = require('./routes/hotels');
 const roomRouter = require('./routes/rooms');
 const foodRouter = require('./routes/food');
 const souvenirRouter = require('./routes/souvenir');
+const orderRouter = require('./routes/orders');
+const helpRouter = require('./routes/helps');
 const { ppid } = require('process');
+
+//const csrfProtection = csrf();
 
 const app = express();
 app.use(session({ secret: process.env.AUTH_SEC, 
@@ -30,6 +36,17 @@ app.use(session({ secret: process.env.AUTH_SEC,
 app.use(passport.initialize());
 app.use(passport.session());
 
+// app.use(limitter({
+//     windowMs: 5000,
+//     max: 5,
+//     message: {
+//         status: 429,
+//         message: 'Too many request, please try again...'
+//     }
+// }))
+
+//app.use(csrfProtection);
+app.use(helmet());
 app.use(flash());
 
 app.use(morgan('dev'));
@@ -47,8 +64,10 @@ app.use('/', authRouter);
 app.use('/profile/guest-profile', userRouter);
 app.use('/hotels/:hotelID', roomRouter);
 app.use('/hotels/rooms', hotelRouter);
+app.use('/hotels/rooms/orders', orderRouter);
 app.use('/hotels/:hotelid', foodRouter);
 app.use('/hotels/:hotelId', souvenirRouter);
+app.use('/help', helpRouter);
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500;
@@ -63,6 +82,7 @@ app.use((err, req, res, next) => {
 
 app.use((req, res, next) => {
     res.locals.error = req.flash('error');
+    //res.locals.csrfToken = req.csrfToken();
     next();
 })
 

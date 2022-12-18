@@ -12,18 +12,18 @@ const {
 const {verifyAdmin, verifyUser} = require('../utils/verifyToken')
 
 // CREATE ROOM
-router.post('/rooms', verifyAdmin, createRoom)
+router.post('/:hotelid/rooms', verifyAdmin, createRoom)
 
 // UPDATE ROOM
-router.patch('/:roomID/rooms', verifyAdmin, updateRoom)
+router.patch('/:id/:hotelid/rooms', verifyAdmin, updateRoom)
 
 // DELETE ROOM
-router.delete('/:roomID/rooms', verifyAdmin, deleteRoom)
+router.delete('/:id/:hotelid/rooms', verifyAdmin, deleteRoom)
 
 //GET ALL ROOM
 router.get('/rooms', getAllRooms)
 
 //GET ROOM BY ID
-router.get('/:roomID/rooms', verifyUser, getRoomById)
+router.get('/:id/:hotelid/rooms', verifyUser, getRoomById)
 
 module.exports = router;

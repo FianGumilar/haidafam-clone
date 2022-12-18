@@ -1,10 +1,24 @@
 const { countDocuments } = require('../models/Hotel');
 const Hotel = require('../models/Hotel');
 const Room = require('../models/Room');
+const { validationResult } = require('express-validator');
 
 exports.createHotel = async(req,res, next) => {
     const newHotel = new Hotel(req.body);
+    const errors = validationResult(req);
+
     try {
+      if(!errors.isEmpty()) {
+        errors.array()
+        return res.status(422).json({
+          path: '/help',
+          pageTitle: 'Add Hotel',
+          editing: false,
+          hasError: false,
+          errorMessage: errors.array()[0].msg,
+          validationErrors: errors.array()
+        })
+      }
       const savedHotel = await newHotel.save();
       return res.status(200).json(savedHotel);
     } catch(err) {
@@ -13,7 +27,18 @@ exports.createHotel = async(req,res, next) => {
 }
 
 exports.updateHotel = async(req, res, next) => {
+  const errors = validationResult(req);
     try {
+      if(!errors.isEmpty()) {
+        errors.array()
+        return res.status(422).json({
+          pageTitle: 'Update Hotel',
+          editing: true,
+          hasError: true,
+          errorMessage: errors.array()[0].msg,
+          validationErrors: errors.array()
+        })
+      }
         const updatedHotel = await Hotel.findByIdAndUpdate(
           req.params.id,
           { $set: req.body },
